@@ -16,6 +16,7 @@ const addUserToViews = require('./middleware/addUserToViews');
 
 // CONTROLLERS
 const authCtrl = require('./controllers/authCtrl');
+const applicationsCtrl = require('./controllers/applicationsCtrl');
 
 // Set the port from environment variable or default to 3000
 const port = process.env.PORT ? process.env.PORT : '3000';
@@ -39,6 +40,10 @@ app.use(addUserToViews);
 
 // PUBLIC ROUTES
 app.get('/', async (req, res) => {
+  if (req.params.user) {
+    return res.redirect(`/users/:${req.session.user._id}/applications`)
+  }
+
   res.render('index.ejs');
 });
 
@@ -56,6 +61,10 @@ app.get('/auth/sign-out', authCtrl.signout);
 app.get('/protected', async (req, res) => {
   res.send(`You are logged in as ${req.session.user.username}`);
 });
+
+// APPLICATIONS
+app.get('/users/:id/applications', applicationsCtrl.index);
+
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);

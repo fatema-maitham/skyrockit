@@ -11,7 +11,12 @@
 
 <body>
     <%- include('../partials/_navbar.ejs') %>
-
+        <a href="/users/<%= user._id %>/applications/<%= application._id %>/edit">
+            Edit Application
+        </a>
+        <form action="/users/<%= user._id %>/applications/<%= application._id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete Application</button>
+        </form>
         <h1>
             <%= application.title %> at <%= application.company %>
         </h1>

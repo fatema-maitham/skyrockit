@@ -47,7 +47,66 @@ const show = async (req, res) => {
 
         res.render('applications/show.ejs', {
             application: application,
+            user: currentUser,
         });
+
+    } catch (err) {
+        console.log(err);
+        res.redirect('/');
+    }
+};
+
+const update = async (req, res) => {
+    try {
+        const currentUser = await user.findById(req.session.user._id);
+
+        const application = currentUser.applications.id(req.params.applicationId);
+        application.set(req.body);
+
+        await currentUser.save();
+
+        res.redirect(
+            `/users/${currentUser._id}/applications/${req.params.applicationId}`
+        );
+    } catch (err) {
+        console.log(err);
+        res.redirect('/');
+    }
+
+};
+
+const edit = async (req, res) => {
+    try {
+        const currentUser = await user.findById(req.session.user._id);
+
+        const application = currentUser.applications.id(
+            req.params.applicationId
+        );
+
+        res.render('applications/edit.ejs', {
+            application: application,
+            user: currentUser,
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.redirect('/');
+    }
+};
+
+const deleteApplication = async (req, res) => {
+    try {
+        const currentUser = await user.findById(req.session.user._id);
+
+        const application = currentUser.applications.id(
+            req.params.applicationId
+        );
+
+        application.deleteOne();
+
+        await currentUser.save();
+
+        res.redirect(`/users/${currentUser._id}/applications`);
 
     } catch (err) {
         console.log(err);
@@ -59,5 +118,8 @@ module.exports = {
     index,
     newApplication,
     create,
-    show
+    show,
+    update,
+    edit,
+    deleteApplication
 };

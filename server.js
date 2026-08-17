@@ -64,7 +64,9 @@ app.get('/protected', async (req, res) => {
 
 // APPLICATIONS
 app.get('/users/:id/applications', applicationsCtrl.index);
-
+app.get('/users/:id/applications/new', applicationsCtrl.newApplication);
+app.get('/users/:id/applications/:applicationId', applicationsCtrl.show);
+app.post('/users/:id/applications', applicationsCtrl.create);
 
 app.listen(port, () => {
   console.log(`The express app is ready on port ${port}!`);
